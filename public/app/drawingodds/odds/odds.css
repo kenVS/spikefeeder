@@ -1,0 +1,12 @@
+.panel-body {
+    min-height: 450px;
+}
+.card-count-bar {
+    padding-bottom: 7px;
+}
+.vert-center {
+    vertical-align: middle;
+}
+.no-border {
+    border-style: none;
+}
