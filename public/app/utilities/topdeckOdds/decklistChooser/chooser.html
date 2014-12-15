@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="list-group">
+            <a href="#" class="list-group-item"
+               data-ng-class="{active: selectedDeck == deck}"
+               data-ng-repeat="deck in decks"
+               data-ng-click="select(deck)">
+                {{deck.name}}
+            </a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="jumbotron"
+             data-ng-show="selectedDeck">
+            <h1>{{selectedDeck.name}}</h1>
+            <pre>{{selectedDeck.cards}}</pre>
+            <p>
+                <a class="btn btn-primary btn-lg" href="#" role="button"
+                   data-ng-click="saveSelection()"
+                   data-ng-disabled="selectedDeck.current">
+                    Choose this Deck
+                </a>
+            </p>
+        </div>
+    </div>
+</div>

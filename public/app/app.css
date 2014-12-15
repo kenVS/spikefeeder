@@ -3,3 +3,8 @@
     margin: 0 auto;
     min-height: 450px;
 }
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}

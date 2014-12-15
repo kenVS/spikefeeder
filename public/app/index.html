@@ -1,65 +1,68 @@
-<html data-ng-app="mtgUtilities">
+<html data-ng-app="spikeFeeder">
 
 <head>
     <base href="/">
     <!-- Static CSS Resources -->
-    <link rel="stylesheet" href="static/bootstrap-css/css/bootstrap.css">
+    <link rel="stylesheet" href="static/bootstrap/dist/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="static/bootstrap-css/css/bootstrap.min.css">-->
 
     <!-- App Specific CSS Resources -->
-    <link rel="stylesheet" href="app/app.css" />
-    <link rel="stylesheet" href="app/drawingodds/odds/odds.css" />
+    <link rel="stylesheet" href="app/app.css"/>
 </head>
 
 <body>
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#/view1">MTG Utilities</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="#/view2">Card Drawing Odds</a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Action</a>
-                            </li>
-                            <li><a href="#">Another action</a>
-                            </li>
-                            <li><a href="#">Something else here</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a href="#">Separated link</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#/view1">MTG Utilities</a>
         </div>
-        <!-- /.container-fluid -->
-    </nav>
-    <div class="page-container">
-        <div data-ng-view></div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a data-ui-sref="utilities.topdeckOdds.odds">Card Drawing Odds</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Other <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Action</a>
+                        </li>
+                        <li><a href="#">Another action</a>
+                        </li>
+                        <li><a href="#">Something else here</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
     </div>
+    <!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div data-ui-view></div>
+</div>
 
-    <!-- Static JavaScript Resources -->
-    <script src="static/angular/angular.js"></script>
-    <script src="static/angular-route/angular-route.js"></script>
-    <script src="static/mathjs/dist/math.js"></script>
+<!-- Static JavaScript Resources -->
+<script src="static/angular/angular.js"></script>
+<script src="static/angular-ui-router/release/angular-ui-router.js"></script>
+<!--<script src="static/jquery/dist/jquery.min.js"></script>-->
+<!--<script src="static/bootstrap/dist/js/bootstrap.min.js"></script>-->
+<script src="static/mathjs/dist/math.js"></script>
 
-    <!-- App JavaScript -->
-    <script src="app/app.js"></script>
-    <!-- Service JavaScript -->
-    <script src="app/components/odds-deck/odds-deck-service.js"></script>
-    <!-- Directive JavaScript -->
-    <script src="app/drawingodds/tabbar-directive.js"></script>
-    <!-- Controller JavaScript -->
-    <script src="app/drawingodds/decklisteditor/editor-controller.js"></script>
-    <script src="app/drawingodds/odds/odds-controller.js"></script>\
+<!-- App JavaScript -->
+<script src="app/app.js"></script>
+<!-- Service JavaScript -->
+<script src="app/components/odds-deck/odds-deck-service.js"></script>
+<script src="app/utilities/topdeckOdds/topdeckOddsUtils-service.js"></script>
+<!-- Directive JavaScript -->
+<!-- Controller JavaScript -->
+<script src="app/utilities/topdeckOdds/decklistChooser/chooser-controller.js"></script>
+<script src="app/utilities/topdeckOdds/decklistEditor/editor-controller.js"></script>
+<script src="app/utilities/topdeckOdds/odds/odds-controller.js"></script>
 </body>
 
 </html>

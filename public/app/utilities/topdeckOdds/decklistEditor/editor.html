@@ -1,0 +1,86 @@
+<div data-ng-show="deck">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group input-group-lg">
+                <span class="input-group-addon">Deck</span>
+                <input type="text" class="form-control" data-ng-model="deck.name">
+            </div>
+        </div>
+    </div>
+    <br/>
+
+    <div class="row">
+        <div class="col-md-10">
+            <div class="input-group">
+                <span class="input-group-addon">Add Card</span>
+                <input type="text" class="form-control"
+                       data-ng-model="cardToAdd"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default"
+                            data-ng-click="addCard(cardToAdd)">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary"
+                    data-ng-click="saveDeck()">
+                Save Changes
+            </button>
+        </div>
+    </div>
+    <br/>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="text-center"></th>
+            <th class="text-center">Count</th>
+            <th>Card Name</th>
+        </tr>
+        </thead>
+        <tr data-ng-repeat="card in deck.cards">
+            <td class="col-md-2 text-center">
+                <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-default"
+                                data-ng-click="removeCard(card)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-default"
+                                data-ng-click="incrementCard(card)">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button type="button" class="btn btn-default"
+                                data-ng-click="decrementCard(card)">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                </div>
+            </td>
+            <td class="col-md-1 text-center">{{card.count}}</td>
+            <td class="col-md-8">{{card.name}}</td>
+        </tr>
+    </table>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="jumbotron"
+             data-ng-hide="deck">
+            <h1>You Haven't Selected a Deck</h1>
+
+            <p>Please go to the deck selection tab to choose a deck.</p>
+
+            <p>
+                <a class="btn btn-primary btn-lg" role="button"
+                   data-ui-sref="utilities.topdeckOdds.chooser"
+                   data-ng-disabled="selectedDeck.current">
+                    Take Me There
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
