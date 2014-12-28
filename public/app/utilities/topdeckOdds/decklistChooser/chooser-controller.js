@@ -10,18 +10,19 @@
             currentDeck = topdeckOddsUtils.getCurrentDeck();
             if (currentDeck !== null) {
                 $scope.selectedDeck = currentDeck;
+                $scope.currentDeck = currentDeck;
             }
 
             $scope.decks = topdeckOddsUtils.getDecks();
         }());
 
-        $scope.select = function (deck) {
+        $scope.selectDeck = function (deck) {
             $scope.selectedDeck = deck;
         };
 
         $scope.saveSelection = function () {
             topdeckOddsUtils.setCurrentDeck($scope.selectedDeck);
-            $scope.selectedDeck = topdeckOddsUtils.getCurrentDeck()
+            $scope.currentDeck = topdeckOddsUtils.getCurrentDeck();
         };
     });
 }());

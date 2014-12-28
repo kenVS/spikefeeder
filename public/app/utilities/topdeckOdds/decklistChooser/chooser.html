@@ -2,9 +2,9 @@
     <div class="col-md-4">
         <div class="list-group">
             <a href="#" class="list-group-item"
-               data-ng-class="{active: selectedDeck == deck}"
+               data-ng-class="{active: selectedDeck === deck}"
                data-ng-repeat="deck in decks"
-               data-ng-click="select(deck)">
+               data-ng-click="selectDeck(deck)">
                 {{deck.name}}
             </a>
         </div>
@@ -17,7 +17,7 @@
             <p>
                 <a class="btn btn-primary btn-lg" href="#" role="button"
                    data-ng-click="saveSelection()"
-                   data-ng-disabled="selectedDeck.current">
+                   data-ng-disabled="selectedDeck === currentDeck">
                     Choose this Deck
                 </a>
             </p>
