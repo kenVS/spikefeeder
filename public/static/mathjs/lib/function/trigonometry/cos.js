@@ -1,18 +1,20 @@
 'use strict';
 
-module.exports = function (math) {
+module.exports = function (math, config) {
   var util = require('../../util/index'),
 
       BigNumber = math.type.BigNumber,
       Complex = require('../../type/Complex'),
       Unit = require('../../type/Unit'),
-      collection = require('../../type/collection'),
+      collection = math.collection,
 
       isNumber = util.number.isNumber,
       isBoolean = util['boolean'].isBoolean,
       isComplex = Complex.isComplex,
       isUnit = Unit.isUnit,
-      isCollection = collection.isCollection;
+      isCollection = collection.isCollection,
+
+      bigCos = util.bignumber.cos_sin_sec_csc;
 
   /**
    * Calculate the cosine of a value.
@@ -37,8 +39,8 @@ module.exports = function (math) {
    *
    *    cos, tan
    *
-   * @param {Number | Boolean | Complex | Unit | Array | Matrix | null} x  Function input
-   * @return {Number | Complex | Array | Matrix} Cosine of x
+   * @param {Number | BigNumber | Boolean | Complex | Unit | Array | Matrix | null} x  Function input
+   * @return {Number | BigNumber | Complex | Array | Matrix} Cosine of x
    */
   math.cos = function cos(x) {
     if (arguments.length != 1) {
@@ -52,8 +54,8 @@ module.exports = function (math) {
     if (isComplex(x)) {
       // cos(z) = (exp(iz) + exp(-iz)) / 2
       return new Complex(
-          0.5 * Math.cos(x.re) * (Math.exp(-x.im) + Math.exp(x.im)),
-          0.5 * Math.sin(x.re) * (Math.exp(-x.im) - Math.exp(x.im))
+          Math.cos(x.re) * math.cosh(-x.im),
+          Math.sin(x.re) * math.sinh(-x.im)
       );
     }
 
@@ -73,9 +75,7 @@ module.exports = function (math) {
     }
 
     if (x instanceof BigNumber) {
-      // TODO: implement BigNumber support
-      // downgrade to Number
-      return cos(x.toNumber());
+      return bigCos(x, BigNumber, 0, false);
     }
 
     throw new math.error.UnsupportedTypeError('cos', math['typeof'](x));

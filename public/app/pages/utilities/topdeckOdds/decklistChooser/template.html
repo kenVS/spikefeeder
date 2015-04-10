@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="list-group">
+            <a href="#" class="list-group-item"
+               data-ng-class="{active: chooser.selectedDeck === deck}"
+               data-ng-repeat="deck in TopdeckOdds.availableDecks"
+               data-ng-click="chooser.selectedDeck = deck">
+                {{deck.name}}
+            </a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="jumbotron"
+             data-ng-show="chooser.selectedDeck">
+            <h1>{{chooser.selectedDeck.name}}</h1>
+            <pre>{{chooser.selectedDeck.cardSets}}</pre>
+            <p>
+                <a class="btn btn-primary btn-lg" href="#" role="button"
+                   data-ng-click="TopdeckOdds.selectDeck(chooser.selectedDeck)"
+                   data-ng-disabled="chooser.selectedDeck === TopdeckOdds.selectedDeck">
+                    Choose this Deck
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{{TopDeckOdds.foobar}}

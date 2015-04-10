@@ -31,6 +31,16 @@
 - [unaryPlus(x)](unaryPlus.md)
 - [xgcd(a, b)](xgcd.md)
 
+## bitwise
+
+- [bitAnd(x, y)](bitAnd.md)
+- [bitNot(x)](bitNot.md)
+- [bitOr(x, y)](bitOr.md)
+- [bitXor(x, y)](bitXor.md)
+- [leftShift(x, y)](leftShift.md)
+- [rightArithShift(x, y)](rightArithShift.md)
+- [rightLogShift(x, y)](rightLogShift.md)
+
 ## complex
 
 - [arg(x)](arg.md)
@@ -42,12 +52,12 @@
 
 - [bignumber(x)](bignumber.md)
 - [boolean(x)](boolean.md)
+- [chain(value)](chain.md)
 - [complex(re, im)](complex.md)
 - [index(range1, range2, ...)](index.md)
 - [matrix(x)](matrix.md)
 - [number(value)](number.md)
 - [parser()](parser.md)
-- [select(value)](select.md)
 - [string(value)](string.md)
 - [unit(x)](unit.md)
 
@@ -57,6 +67,13 @@
 - [eval(expr [, scope])](eval.md)
 - [help(search)](help.md)
 - [parse(expr [, scope])](parse.md)
+
+## logical
+
+- [and(x, y)](and.md)
+- [not(x)](not.md)
+- [or(x, y)](or.md)
+- [xor(x, y)](xor.md)
 
 ## matrix
 
@@ -74,6 +91,7 @@
 - [size(x)](size.md)
 - [squeeze(x)](squeeze.md)
 - [subset(x, index [, replacement])](subset.md)
+- [trace(x)](trace.md)
 - [transpose(x)](transpose.md)
 - [zeros(m, n, p, ...)](zeros.md)
 
@@ -82,6 +100,7 @@
 - [combinations(n, k)](combinations.md)
 - [distribution(name)](distribution.md)
 - [factorial(n)](factorial.md)
+- [gamma(n)](gamma.md)
 - [permutations(n)](permutations.md)
 - [pickRandom(array)](pickRandom.md)
 - [random([min, max])](random.md)
@@ -101,8 +120,8 @@
 ## statistics
 
 - [max(a, b, c, ...)](max.md)
-- [mean.mean(a, b, c, ...)](mean.md)
-- [mean.median(a, b, c, ...)](median.md)
+- [mean(a, b, c, ...)](mean.md)
+- [median(a, b, c, ...)](median.md)
 - [min(a, b, c, ...)](min.md)
 - [prod(a, b, c, ...)](prod.md)
 - [std(a, b, c, ...)](std.md)
@@ -112,9 +131,18 @@
 ## trigonometry
 
 - [acos(x)](acos.md)
+- [acosh(x)](acosh.md)
+- [acot(x)](acot.md)
+- [acoth(x)](acoth.md)
+- [acsc(x)](acsc.md)
+- [acsch(x)](acsch.md)
+- [asec(x)](asec.md)
+- [asech(x)](asech.md)
 - [asin(x)](asin.md)
+- [asinh(x)](asinh.md)
 - [atan(x)](atan.md)
 - [atan2(y, x)](atan2.md)
+- [atanh(x)](atanh.md)
 - [cos(x)](cos.md)
 - [cosh(x)](cosh.md)
 - [cot(x)](cot.md)

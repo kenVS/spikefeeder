@@ -1,0 +1,97 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default"
+                        data-ng-class="{active: TopdeckOdds.numberOfDraws === 7}"
+                        data-ng-click="simulator.setNumberOfDraws(7)">Opening Hand
+                </button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default"
+                        data-ng-class="{active: TopdeckOdds.numberOfDraws === 1}"
+                        data-ng-click="simulator.setNumberOfDraws(1)">1
+                </button>
+                <button type="button" class="btn btn-default"
+                        data-ng-class="{active: TopdeckOdds.numberOfDraws === 2}"
+                        data-ng-click="simulator.setNumberOfDraws(2)">2
+                </button>
+                <button type="button" class="btn btn-default"
+                        data-ng-class="{active: TopdeckOdds.numberOfDraws === 3}"
+                        data-ng-click="simulator.setNumberOfDraws(3)">3
+                </button>
+                <button type="button" class="btn btn-default"
+                        data-ng-class="{active: TopdeckOdds.numberOfDraws === 4}"
+                        data-ng-click="simulator.setNumberOfDraws(4)">4
+                </button>
+                <button type="button" class="btn btn-default"
+                        data-ng-class="{active: TopdeckOdds.numberOfDraws === 5}"
+                        data-ng-click="simulator.setNumberOfDraws(5)">5
+                </button>
+                <button type="button" class="btn btn-default"
+                        data-ng-class="{active: TopdeckOdds.numberOfDraws === 6}"
+                        data-ng-click="simulator.setNumberOfDraws(6)">6
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        {{drawPile.name}}
+    </div>
+</div>
+<br/>
+<div data-ng-show="Topd"></div>
+<div class="row"
+     data-ng-show="TopDeckOdds.selectedDeck !== TopDeckOdds.workingDeck">
+    <div class="col-md-12">
+        <div class="alert alert-warning" role="alert">You've changed your selected deck.
+            <a href="#"
+               class="alert-link"
+               data-ng-click="simulator.switchDeck()">Click here</a> to switch and discard your current progress.
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Used Cards</div>
+            <div class="panel-body">
+                <div class="well" data-ng-show="TopdeckOdds.usedPile.isEmpty()">
+                    Add cards to used pile to see change in drawing odds.
+                </div>
+                <ul class="list-group"
+                    data-ng-hide="TopdeckOdds.usedPile.isEmpty()">
+                    <li class="list-group-item"
+                        data-ng-repeat="set in TopdeckOdds.usedPile.cardSets"
+                        data-ng-model="usedItemsList">
+                        {{set.card.name}}
+                        <span class="badge">{{set.count}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">Cards Remaining in Deck</div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    <li class="list-group-item vert-center"
+                        data-ng-repeat="item in simulator.probabilities | orderBy:'-probability'">
+                        <button type="button"
+                                class="btn btn-default"
+                                data-ng-show="item.type === 'CARD'"
+                                data-ng-click="simulator.useCard(item.name)">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                        {{item.name}}
+                        <span class="badge">{{item.count}}</span>
+                        <span class="badge">{{item.probability}}%</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

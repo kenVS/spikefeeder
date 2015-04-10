@@ -70,27 +70,27 @@ function create (config) {
 
       // TODO: remove deprecated setting some day (deprecated since version 0.17.0)
       if (options.number && options.number.defaultType) {
-        throw new Error('setting `number.defaultType` is deprecated. Use `number` instead.')
+        throw new Error('setting `number.defaultType` is deprecated. Use `number` instead.');
       }
 
       // TODO: remove deprecated setting some day (deprecated since version 0.17.0)
       if (options.number && options.number.precision) {
-        throw new Error('setting `number.precision` is deprecated. Use `precision` instead.')
+        throw new Error('setting `number.precision` is deprecated. Use `precision` instead.');
       }
 
       // TODO: remove deprecated setting some day (deprecated since version 0.17.0)
       if (options.matrix && options.matrix.defaultType) {
-        throw new Error('setting `matrix.defaultType` is deprecated. Use `matrix` instead.')
+        throw new Error('setting `matrix.defaultType` is deprecated. Use `matrix` instead.');
       }
 
       // TODO: remove deprecated setting some day (deprecated since version 0.15.0)
       if (options.matrix && options.matrix['default']) {
-        throw new Error('setting `matrix.default` is deprecated. Use `matrix` instead.')
+        throw new Error('setting `matrix.default` is deprecated. Use `matrix` instead.');
       }
 
       // TODO: remove deprecated setting some day (deprecated since version 0.20.0)
       if (options.decimals) {
-        throw new Error('setting `decimals` is deprecated. Use `precision` instead.')
+        throw new Error('setting `decimals` is deprecated. Use `precision` instead.');
       }
     }
 
@@ -113,7 +113,30 @@ function create (config) {
   math.create = create;
 
   // create a new BigNumber factory for this instance of math.js
-  var BigNumber = require('decimal.js').constructor();
+  var BigNumber = require('./type/BigNumber').constructor();
+
+  /**
+   * Get a JSON representation of a BigNumber containing
+   * type information
+   * @returns {Object} Returns a JSON object structured as:
+   *                   `{"mathjs": "BigNumber", "value": "0.2"}`
+   */
+  BigNumber.prototype.toJSON = function () {
+    return {
+      mathjs: 'BigNumber',
+      value: this.toString()
+    };
+  };
+
+  /**
+   * Instantiate a BigNumber from a JSON object
+   * @param {Object} json  a JSON object structured as:
+   *                       `{"mathjs": "BigNumber", "value": "0.2"}`
+   * @return {BigNumber}
+   */
+  BigNumber.fromJSON = function (json) {
+    return new BigNumber(json.value);
+  };
 
   // extend BigNumber with a function clone
   if (typeof BigNumber.prototype.clone !== 'function') {
@@ -122,7 +145,7 @@ function create (config) {
      * @return {BigNumber} clone
      */
     BigNumber.prototype.clone = function() {
-      return new BigNumber(this);
+      return this; // just return itself (a BigNumber is immutable)
     };
   }
 
@@ -156,20 +179,48 @@ function create (config) {
   math.type.Complex = require('./type/Complex');
   math.type.Range = require('./type/Range');
   math.type.Index = require('./type/Index');
-  math.type.Matrix = require('./type/Matrix');
+  math.type.Matrix = require('./type/Matrix')(_config);
   math.type.Unit = require('./type/Unit');
   math.type.Help = require('./type/Help');
   math.type.ResultSet = require('./type/ResultSet');
   math.type.BigNumber = BigNumber;
 
-  math.collection = require('./type/collection');
+  math.collection = require('./type/collection')(math, _config);
+
+  // matrix storage formats
+  math.type.CcsMatrix = require('./type/matrix/CcsMatrix')(math, _config);
+  math.type.CrsMatrix = require('./type/matrix/CrsMatrix')(math, _config);
+  math.type.DenseMatrix = require('./type/matrix/DenseMatrix')(math, _config);
+
+  // matrix storage format registry
+  math.type.Matrix._storage.ccs = math.type.CcsMatrix;
+  math.type.Matrix._storage.crs = math.type.CrsMatrix;
+  math.type.Matrix._storage.dense = math.type.DenseMatrix;
+  math.type.Matrix._storage['default'] = math.type.DenseMatrix;
 
   // expression (parse, Parser, nodes, docs)
   math.expression = {};
   math.expression.node = require('./expression/node/index');
-  math.expression.parse = require('./expression/parse');
-  math.expression.Parser = require('./expression/Parser');
+  math.expression.parse = require('./expression/parse')(math, _config);
+  math.expression.Parser = require('./expression/Parser')(math, _config);
   math.expression.docs = require('./expression/docs/index');
+
+  // serialization utilities
+  math.json = {
+    reviver: require('./json/reviver')(math, _config)
+  };
+  
+  // functions - construction (must be defined before the rest of functions)
+  require('./function/construction/bignumber')(math, _config);
+  require('./function/construction/boolean')(math, _config);
+  require('./function/construction/complex')(math, _config);
+  require('./function/construction/index')(math, _config);
+  require('./function/construction/matrix')(math, _config);
+  require('./function/construction/number')(math, _config);
+  require('./function/construction/parser')(math, _config);
+  require('./function/construction/chain')(math, _config);
+  require('./function/construction/string')(math, _config);
+  require('./function/construction/unit')(math, _config);
 
   // expression parser
   require('./function/expression/compile')(math, _config);
@@ -182,6 +233,7 @@ function create (config) {
   require('./function/arithmetic/add')(math, _config);
   require('./function/arithmetic/ceil')(math, _config);
   require('./function/arithmetic/cube')(math, _config);
+  require('./function/arithmetic/_divide')(math, _config);
   require('./function/arithmetic/divide')(math, _config);
   require('./function/arithmetic/dotDivide')(math, _config);
   require('./function/arithmetic/dotMultiply')(math, _config);
@@ -207,15 +259,14 @@ function create (config) {
   require('./function/arithmetic/unaryPlus')(math, _config);
   require('./function/arithmetic/xgcd')(math, _config);
 
-  // functions - relational
-  require('./function/relational/compare')(math, _config);
-  require('./function/relational/deepEqual')(math, _config);
-  require('./function/relational/equal')(math, _config);
-  require('./function/relational/larger')(math, _config);
-  require('./function/relational/largerEq')(math, _config);
-  require('./function/relational/smaller')(math, _config);
-  require('./function/relational/smallerEq')(math, _config);
-  require('./function/relational/unequal')(math, _config);
+  // functions - bitwise
+  require('./function/bitwise/bitAnd')(math, _config);
+  require('./function/bitwise/bitNot')(math, _config);
+  require('./function/bitwise/bitOr')(math, _config);
+  require('./function/bitwise/bitXor')(math, _config);
+  require('./function/bitwise/leftShift')(math, _config);
+  require('./function/bitwise/rightArithShift')(math, _config);
+  require('./function/bitwise/rightLogShift')(math, _config);
 
   // functions - complex
   require('./function/complex/arg')(math, _config);
@@ -223,17 +274,11 @@ function create (config) {
   require('./function/complex/re')(math, _config);
   require('./function/complex/im')(math, _config);
 
-  // functions - construction
-  require('./function/construction/bignumber')(math, _config);
-  require('./function/construction/boolean')(math, _config);
-  require('./function/construction/complex')(math, _config);
-  require('./function/construction/index')(math, _config);
-  require('./function/construction/matrix')(math, _config);
-  require('./function/construction/number')(math, _config);
-  require('./function/construction/parser')(math, _config);
-  require('./function/construction/select')(math, _config);
-  require('./function/construction/string')(math, _config);
-  require('./function/construction/unit')(math, _config);
+  // functions - logical
+  require('./function/logical/and')(math, _config);
+  require('./function/logical/not')(math, _config);
+  require('./function/logical/or')(math, _config);
+  require('./function/logical/xor')(math, _config);
 
   // functions - matrix
   require('./function/matrix/concat')(math, _config);
@@ -250,17 +295,29 @@ function create (config) {
   require('./function/matrix/size')(math, _config);
   require('./function/matrix/squeeze')(math, _config);
   require('./function/matrix/subset')(math, _config);
+  require('./function/matrix/trace')(math, _config);
   require('./function/matrix/transpose')(math, _config);
   require('./function/matrix/zeros')(math, _config);
 
   // functions - probability
   //require('./function/probability/distribution')(math, _config); // TODO: rethink math.distribution
   require('./function/probability/factorial')(math, _config);
+  require('./function/probability/gamma')(math, _config);
   require('./function/probability/random')(math, _config);
   require('./function/probability/randomInt')(math, _config);
   require('./function/probability/pickRandom')(math, _config);
   require('./function/probability/permutations')(math, _config);
   require('./function/probability/combinations')(math, _config);
+
+  // functions - relational
+  require('./function/relational/compare')(math, _config);
+  require('./function/relational/deepEqual')(math, _config);
+  require('./function/relational/equal')(math, _config);
+  require('./function/relational/larger')(math, _config);
+  require('./function/relational/largerEq')(math, _config);
+  require('./function/relational/smaller')(math, _config);
+  require('./function/relational/smallerEq')(math, _config);
+  require('./function/relational/unequal')(math, _config);
 
   // functions - statistics
   require('./function/statistics/min')(math, _config);
@@ -274,9 +331,18 @@ function create (config) {
 
   // functions - trigonometry
   require('./function/trigonometry/acos')(math, _config);
+  require('./function/trigonometry/acosh')(math, _config);
+  require('./function/trigonometry/acot')(math, _config);
+  require('./function/trigonometry/acoth')(math, _config);
+  require('./function/trigonometry/acsc')(math, _config);
+  require('./function/trigonometry/acsch')(math, _config);
+  require('./function/trigonometry/asec')(math, _config);
+  require('./function/trigonometry/asech')(math, _config);
   require('./function/trigonometry/asin')(math, _config);
+  require('./function/trigonometry/asinh')(math, _config);
   require('./function/trigonometry/atan')(math, _config);
   require('./function/trigonometry/atan2')(math, _config);
+  require('./function/trigonometry/atanh')(math, _config);
   require('./function/trigonometry/cos')(math, _config);
   require('./function/trigonometry/cosh')(math, _config);
   require('./function/trigonometry/cot')(math, _config);
@@ -313,20 +379,23 @@ function create (config) {
   require('./constants')(math, _config);
 
   // attach transform functions (for converting one-based indices to zero-based)
-  require('./expression/transform/concat.transform')(math, _config);
-  require('./expression/transform/filter.transform')(math, _config);
-  require('./expression/transform/forEach.transform')(math, _config);
-  require('./expression/transform/index.transform')(math, _config);
-  require('./expression/transform/map.transform')(math, _config);
-  require('./expression/transform/max.transform')(math, _config);
-  require('./expression/transform/mean.transform')(math, _config);
-  require('./expression/transform/min.transform')(math, _config);
-  require('./expression/transform/range.transform')(math, _config);
-  require('./expression/transform/subset.transform')(math, _config);
+  math.expression.transform = {
+    concat: require('./expression/transform/concat.transform')(math, _config),
+    filter: require('./expression/transform/filter.transform')(math, _config),
+    forEach:require('./expression/transform/forEach.transform')(math, _config),
+    index:  require('./expression/transform/index.transform')(math, _config),
+    map:    require('./expression/transform/map.transform')(math, _config),
+    max:    require('./expression/transform/max.transform')(math, _config),
+    mean:   require('./expression/transform/mean.transform')(math, _config),
+    min:    require('./expression/transform/min.transform')(math, _config),
+    range:  require('./expression/transform/range.transform')(math, _config),
+    subset: require('./expression/transform/subset.transform')(math, _config)
+  };
 
   // selector (we initialize after all functions are loaded)
   math.chaining = {};
-  math.chaining.Selector = require('./chaining/Selector')(math, _config);
+  math.chaining.Chain = require('./chaining/Chain')(math, _config);
+  math.chaining.Selector = math.chaining.Chain; // TODO: deprecate in v2.0
 
   // apply provided configuration options
   math.config(_config); // apply the default options

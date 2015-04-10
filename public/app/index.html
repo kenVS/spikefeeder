@@ -17,7 +17,7 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a data-ui-sref="utilities.topdeckOdds.odds">Card Drawing Odds</a>
+                <li><a data-ui-sref="utilities.topdeckOdds.simulator">Card Drawing Odds</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -48,23 +48,34 @@
 <!-- Static JavaScript Resources -->
 <script src="static/angular/angular.js"></script>
 <script src="static/angular-ui-router/release/angular-ui-router.js"></script>
-<!--<script src="static/jquery/dist/jquery.min.js"></script>-->
-<!--<script src="static/bootstrap/dist/js/bootstrap.min.js"></script>-->
+<script src="static/jstat/dist/jstat.js"></script>
+<script src="static/lodash/lodash.js"></script>
 <script src="static/mathjs/dist/math.js"></script>
-<script src="static/jstat/dist/jstat.min.js"></script>
 
-<!-- App JavaScript -->
+<!-- App & Routes JavaScript -->
 <script src="app/app.js"></script>
+<script src="app/pages/utilities/topdeckOdds/routes.js"></script>
+
 <!-- Models JavaScript -->
-<script src="app/components/models/topdeckOdds/card-model.js"></script>
-<script src="app/components/models/topdeckOdds/deck-model.js"></script>
+<script src="app/shared/models/card/oracle/model.js"></script>
+<script src="app/shared/models/card/model.js"></script>
+<script src="app/shared/models/cardSet/model.js"></script>
+<script src="app/shared/models/decklist/model.js"></script>
+<script src="app/shared/models/zone/model.js"></script>
+
 <!-- Service JavaScript -->
-<script src="app/utilities/topdeckOdds/topdeckOddsUtils-service.js"></script>
+<script src="app/shared/services/decklists/service.js"></script>
+<script src="app/shared/services/cardSets/stats/service.js"></script>
+<script src="app/shared/services/utilities/libraries/factory.js"></script>
+<script src="app/shared/services/utilities/logger/service.js"></script>
+
 <!-- Directive JavaScript -->
-<!-- Controller JavaScript -->
-<script src="app/utilities/topdeckOdds/decklistChooser/chooser-controller.js"></script>
-<script src="app/utilities/topdeckOdds/decklistEditor/editor-controller.js"></script>
-<script src="app/utilities/topdeckOdds/odds/odds-controller.js"></script>
+
+<!-- Topdeck Odds JavaScript -->
+<script src="app/pages/utilities/topdeckOdds/controller.js"></script>
+<script src="app/pages/utilities/topdeckOdds/viewModel.js"></script>
+<script src="app/pages/utilities/topdeckOdds/decklistChooser/controller.js"></script>
+<script src="app/pages/utilities/topdeckOdds/oddsSimulator/controller.js"></script>
 </body>
 
 </html>

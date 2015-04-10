@@ -1,18 +1,20 @@
 'use strict';
 
-module.exports = function (math) {
+module.exports = function (math, config) {
   var util = require('../../util/index'),
 
       BigNumber = math.type.BigNumber,
       Complex = require('../../type/Complex'),
       Unit = require('../../type/Unit'),
-      collection = require('../../type/collection'),
+      collection = math.collection,
 
       isNumber = util.number.isNumber,
       isBoolean = util['boolean'].isBoolean,
       isComplex = Complex.isComplex,
       isUnit = Unit.isUnit,
-      isCollection = collection.isCollection;
+      isCollection = collection.isCollection,
+
+      bigSin = util.bignumber.cos_sin_sec_csc;
 
   /**
    * Calculate the sine of a value.
@@ -37,8 +39,8 @@ module.exports = function (math) {
    *
    *    cos, tan
    *
-   * @param {Number | Boolean | Complex | Unit | Array | Matrix | null} x  Function input
-   * @return {Number | Complex | Array | Matrix} Sine of x
+   * @param {Number | BigNumber | Boolean | Complex | Unit | Array | Matrix | null} x  Function input
+   * @return {Number | BigNumber | Complex | Array | Matrix} Sine of x
    */
   math.sin = function sin(x) {
     if (arguments.length != 1) {
@@ -51,8 +53,8 @@ module.exports = function (math) {
 
     if (isComplex(x)) {
       return new Complex(
-          0.5 * Math.sin(x.re) * (Math.exp(-x.im) + Math.exp( x.im)),
-          0.5 * Math.cos(x.re) * (Math.exp( x.im) - Math.exp(-x.im))
+          Math.sin(x.re) * math.cosh(-x.im),
+          Math.cos(x.re) * math.sinh(x.im)
       );
     }
 
@@ -64,7 +66,8 @@ module.exports = function (math) {
     }
 
     if (isCollection(x)) {
-      return collection.deepMap(x, sin);
+      // deep map collection, skip zeros since sin(0) = 0
+      return collection.deepMap(x, sin, true);
     }
 
     if (isBoolean(x) || x === null) {
@@ -72,9 +75,7 @@ module.exports = function (math) {
     }
 
     if (x instanceof BigNumber) {
-      // TODO: implement BigNumber support
-      // downgrade to Number
-      return sin(x.toNumber());
+      return bigSin(x, BigNumber, 1, false);
     }
 
     throw new math.error.UnsupportedTypeError('sin', math['typeof'](x));

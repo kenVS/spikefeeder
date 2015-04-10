@@ -1,10 +1,10 @@
 'use strict';
 
-module.exports = function (math) {
+module.exports = function (math, config) {
   var util = require('../../util/index'),
 
       BigNumber = math.type.BigNumber,
-      collection = require('../../type/collection'),
+      collection = math.collection,
 
       isNumber = util.number.isNumber,
       isBoolean = util['boolean'].isBoolean,
@@ -28,60 +28,66 @@ module.exports = function (math) {
    *
    * See also:
    *
-   *    combinations, permutations
+   *    combinations, gamma, permutations
    *
    * @param {Number | BigNumber | Array | Matrix | Boolean | null} n   An integer number
    * @return {Number | BigNumber | Array | Matrix}    The factorial of `n`
    */
   math.factorial = function factorial (n) {
-    var value, res;
+    var value, res, preciseFacs;
 
     if (arguments.length != 1) {
       throw new math.error.ArgumentsError('factorial', arguments.length, 1);
     }
 
     if (isNumber(n)) {
-      if (!isInteger(n) || n < 0) {
-        throw new TypeError('Positive integer value expected in function factorial');
-      }
-
-      value = n - 1;
-      res = n;
-      while (value > 1) {
-        res *= value;
-        value--;
-      }
-
-      if (res == 0) {
-        res = 1;        // 0! is per definition 1
-      }
-
-      return res;
+      return n !== Number.POSITIVE_INFINITY
+        ? math.gamma(n + 1)
+        : Math.sqrt(2*Math.PI);
     }
 
     if (n instanceof BigNumber) {
-      if (!(isPositiveInteger(n))) {
-        throw new TypeError('Positive integer value expected in function factorial');
+      if (!(isNonNegativeInteger(n))) {
+        return n.isNegative() || n.isFinite()
+          ? math.gamma(n.plus(1))
+          : util.bignumber.tau(config.precision).sqrt();
       }
 
-      var one = new BigNumber(1);
-
-      value = n.minus(one);
-      res = n;
-      while (value.gt(one)) {
-        res = res.times(value);
-        value = value.minus(one);
+      n = n.toNumber();   // should definitely be below Number.MAX_VALUE
+      if (n < smallBigFacs.length) {
+        return BigNumber.convert(smallBigFacs[n]).toSD(config.precision);
       }
 
-      if (res.equals(0)) {
-        res = one;        // 0! is per definition 1
+      // be wary of round-off errors
+      var precision = config.precision + (Math.log(n) | 0);
+      var Big = BigNumber.constructor({precision: precision});
+
+      // adjust n do align with the precision specific tables
+      n -= smallBigFacs.length;
+      if (preciseFacs = bigBigFacs[precision]) {
+        if (preciseFacs[n]) {
+          return new BigNumber(preciseFacs[n].toPrecision(config.precision));
+        }
+        res = preciseFacs[preciseFacs.length-1];
+      } else {
+        preciseFacs = bigBigFacs[precision] = [];
+        res = new Big(smallBigFacs[smallBigFacs.length-1])
+          .toSD(precision);
       }
 
-      return res;
+      var one = new Big(1);
+      value = new Big(preciseFacs.length + smallBigFacs.length);
+      for (var i = preciseFacs.length; i < n; ++i) {
+        preciseFacs[i] = res = res.times(value);
+        value = value.plus(one);
+      }
+
+      preciseFacs[n] = res.times(value);
+      return new BigNumber(preciseFacs[n].toPrecision(config.precision));
     }
 
     if (isBoolean(n) || n === null) {
-      return 1; // factorial(1) = 1, factorial(0) = 1
+      return 1;           // factorial(1) = 1, factorial(0) = 1
     }
 
     if (isCollection(n)) {
@@ -92,11 +98,39 @@ module.exports = function (math) {
   };
 
   /**
-   * Test whether BigNumber n is a positive integer
+   * Test whether BigNumber n is a non-negative integer
    * @param {BigNumber} n
-   * @returns {boolean} isPositiveInteger
+   * @returns {boolean} isNonNegativeInteger
    */
-  var isPositiveInteger = function(n) {
-    return n.isInteger() && n.gte(0);
+  var isNonNegativeInteger = function(n) {
+    return n.isInteger() && (!n.isNegative() || n.isZero());
   };
+
+  // 21! >= values for each precision
+  var bigBigFacs = [];
+
+  // 0-20! values
+  var smallBigFacs = [
+    1,
+    1,
+    2,
+    6,
+    24,
+    120,
+    720,
+    5040,
+    40320,
+    362880,
+    3628800,
+    39916800,
+    479001600,
+    6227020800,
+    87178291200,
+    1307674368000,
+    20922789888000,
+    355687428096000,
+    6402373705728000,
+    121645100408832000,
+    2432902008176640000
+  ]
 };

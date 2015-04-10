@@ -49,15 +49,14 @@ exports.unaryMinus = require('./function/arithmetic/unaryMinus');
 exports.unaryPlus = require('./function/arithmetic/unaryPlus');
 exports.xgcd = require('./function/arithmetic/xgcd');
 
-// functions - relational
-exports.compare = require('./function/relational/compare');
-exports.deepEqual = require('./function/relational/deepEqual');
-exports['equal'] = require('./function/relational/equal');
-exports.larger = require('./function/relational/larger');
-exports.largerEq = require('./function/relational/largerEq');
-exports.smaller = require('./function/relational/smaller');
-exports.smallerEq = require('./function/relational/smallerEq');
-exports.unequal = require('./function/relational/unequal');
+// functions - bitwise
+exports.bitAnd = require('./function/bitwise/bitAnd');
+exports.bitNot = require('./function/bitwise/bitNot');
+exports.bitOr = require('./function/bitwise/bitOr');
+exports.bitXor = require('./function/bitwise/bitXor');
+exports.leftShift = require('./function/bitwise/leftShift');
+exports.rightArithShift = require('./function/bitwise/rightArithShift');
+exports.rightLogShift = require('./function/bitwise/rightLogShift');
 
 // functions - complex
 exports.arg = require('./function/complex/arg');
@@ -79,6 +78,12 @@ exports.unit = require('./function/construction/unit');
 exports['eval'] =  require('./function/expression/eval');
 exports.help =  require('./function/expression/help');
 
+// functions - logical
+exports['and'] = require('./function/logical/and');
+exports['not'] = require('./function/logical/not');
+exports['or'] = require('./function/logical/or');
+exports['xor'] = require('./function/logical/xor');
+
 // functions - matrix
 exports['concat'] = require('./function/matrix/concat');
 exports.cross = require('./function/matrix/cross');
@@ -94,6 +99,7 @@ exports.resize = require('./function/matrix/resize');
 exports.size = require('./function/matrix/size');
 exports.squeeze = require('./function/matrix/squeeze');
 exports.subset = require('./function/matrix/subset');
+exports.trace = require('./function/matrix/trace');
 exports.transpose = require('./function/matrix/transpose');
 exports.zeros = require('./function/matrix/zeros');
 
@@ -101,10 +107,21 @@ exports.zeros = require('./function/matrix/zeros');
 exports.combinations = require('./function/probability/combinations');
 //exports.distribution = require('./function/probability/distribution');
 exports.factorial = require('./function/probability/factorial');
+exports.gamma = require('./function/probability/gamma');
 exports.permutations = require('./function/probability/permutations');
 exports.pickRandom = require('./function/probability/pickRandom');
 exports.random = require('./function/probability/random');
 exports.randomInt = require('./function/probability/randomInt');
+
+// functions - relational
+exports.compare = require('./function/relational/compare');
+exports.deepEqual = require('./function/relational/deepEqual');
+exports['equal'] = require('./function/relational/equal');
+exports.larger = require('./function/relational/larger');
+exports.largerEq = require('./function/relational/largerEq');
+exports.smaller = require('./function/relational/smaller');
+exports.smallerEq = require('./function/relational/smallerEq');
+exports.unequal = require('./function/relational/unequal');
 
 // functions - statistics
 exports.max = require('./function/statistics/max');
@@ -118,8 +135,17 @@ exports['var'] = require('./function/statistics/var');
 
 // functions - trigonometry
 exports.acos = require('./function/trigonometry/acos');
+exports.acosh = require('./function/trigonometry/acosh');
+exports.acot = require('./function/trigonometry/acot');
+exports.acoth = require('./function/trigonometry/acoth');
+exports.acsc = require('./function/trigonometry/acsc');
+exports.acsch = require('./function/trigonometry/acsch');
+exports.asec = require('./function/trigonometry/asec');
+exports.asech = require('./function/trigonometry/asech');
 exports.asin = require('./function/trigonometry/asin');
+exports.asinh = require('./function/trigonometry/asinh');
 exports.atan = require('./function/trigonometry/atan');
+exports.atanh = require('./function/trigonometry/atanh');
 exports.atan2 = require('./function/trigonometry/atan2');
 exports.cos = require('./function/trigonometry/cos');
 exports.cosh = require('./function/trigonometry/cosh');

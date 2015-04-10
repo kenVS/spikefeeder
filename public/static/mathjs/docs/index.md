@@ -23,7 +23,7 @@ describing all available functions, constants, and units in detail.
   - [Syntax](expressions/syntax.md)
   - [Expression trees](expressions/expression_trees.md)
   - [Customization](expressions/customization.md)
-- [Chained Operations](chained_operations.md)
+- [Chaining](chaining.md)
 - [Data Types](datatypes/index.md)
   - [Numbers](datatypes/numbers.md)
   - [BigNumbers](datatypes/bignumbers.md)
@@ -31,6 +31,7 @@ describing all available functions, constants, and units in detail.
   - [Matrices](datatypes/matrices.md)
   - [Units](datatypes/units.md)
 - [Configuration](configuration.md)
+- [Serialization](serialization.md)
 - [Extension](extension.md)
 - [Command Line Interface](command_line_interface.md)
 

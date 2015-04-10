@@ -86,7 +86,7 @@ All nodes have the following methods:
     
     ```js
     var node = math.parse('3 * x + 2');
-    node.traverse(function (node, path, parent) {
+    node.forEach(function (node, path, parent) {
       switch (node.type) {
         case 'OperatorNode': console.log(node.type, node.op);    break;
         case 'ConstantNode': console.log(node.type, node.value); break;
@@ -255,6 +255,12 @@ var node2 = new math.expression.node.AssignmentNode('a', expr);
 
 
 ### BlockNode
+
+A `BlockNode` is created when parsing a multi line expression like `a=2;b=3` or
+`a=2\nb=3`. Evaluating a `BlockNode` returns a `ResultSet`. The results can be
+retrieved via `ResultSet.entries` or `ResultSet.valueOf()`, which contains
+an `Array` with the results of the visible lines (i.e. lines not ending with
+a semicolon).
 
 Construction:
 

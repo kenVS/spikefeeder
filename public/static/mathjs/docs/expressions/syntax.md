@@ -20,6 +20,8 @@ the lower level syntax of math.js. Differences are:
 - Both indexes and ranges and have the upper-bound included.
 - There is a differing syntax for defining functions. Example: `f(x) = x^2`.
 - There are custom operators like `x + y` instead of `add(x, y)`.
+- Some operators are different. For example  `^` is used for exponentiation,
+  not bitwise xor.
 
 
 ## Operators
@@ -45,14 +47,14 @@ Operator    | Name                    | Syntax      | Associativity | Example   
 ----------- | ----------------------- | ----------  | ------------- | --------------------- | ---------------
 `(`, `)`    | Parentheses             | `(x)`       | None          | `2 * (3 + 4)`         | `14`
 `[`, `]`    | Matrix, Index           | `[...]`     | None          | `[[1,2],[3,4]]`       | `[[1,2],[3,4]]`
-`,`         | Parameter separator     | `x, y`      | None          | `max(2, 1, 5)`        | `5`
+`,`         | Parameter separator     | `x, y`      | Left to right | `max(2, 1, 5)`        | `5`
 `;`         | Statement separator     | `x; y`      | Left to right | `a=2; b=3; a*b`       | `[6]`
 `;`         | Row separator           | `[x, y]`    | Left to right | `[1,2;3,4]`           | `[[1,2],[3,4]]`
 `\n`        | Statement separator     | `x \n y`    | Left to right | `a=2 \n b=3 \n a*b`   | `[2,3,6]`
 `+`         | Add                     | `x + y`     | Left to right | `4 + 5`               | `9`
-`+`         | Unary plus              | `+y`        | None          | `+"4"`                | `4`
+`+`         | Unary plus              | `+y`        | Right to left | `+4`                  | `4`
 `-`         | Subtract                | `x - y`     | Left to right | `7 - 3`               | `4`
-`-`         | Unary minus             | `-y`        | None          | `-4`                  | `-4`
+`-`         | Unary minus             | `-y`        | Right to left | `-4`                  | `-4`
 `*`         | Multiply                | `x * y`     | Left to right | `2 * 3`               | `6`
 `.*`        | Element-wise multiply   | `x .* y`    | Left to right | `[1,2,3] .* [1,2,3]`  | `[1,4,9]`
 `/`         | Divide                  | `x / y`     | Left to right | `6 / 2`               | `3`
@@ -60,11 +62,22 @@ Operator    | Name                    | Syntax      | Associativity | Example   
 `%`, `mod`  | Modulus                 | `x % y`     | Left to right | `8 % 3`               | `2`
 `^`         | Power                   | `x ^ y`     | Right to left | `2 ^ 3`               | `8`
 `.^`        | Element-wise power      | `x .^ y`    | Right to left | `[2,3] .^ [3,3]`      | `[9,27]`
-`'`         | Transpose               | `y'`        | None          | `[[1,2],[3,4]]'`      | `[[1,3],[2,4]]`
-`!`         | Factorial               | `y!`        | None          | `5!`                  | `120`
+`'`         | Transpose               | `y'`        | Left to right | `[[1,2],[3,4]]'`      | `[[1,3],[2,4]]`
+`!`         | Factorial               | `y!`        | Left to right | `5!`                  | `120`
+`&`         | Bitwise and             | `x & y`     | Left to right | `5 & 3`               | `1`
+`~`         | Bitwise not             | `~x`        | Right to left | `~2`                  | `-3`
+<code>&#124;</code>  | Bitwise or     | <code>x &#124; y</code>   | Left to right | <code>5 &#124; 3</code>  | `7`
+<code>^&#124;</code> | Bitwise xor    | <code>x ^&#124; y</code>  | Left to right | <code>5 ^&#124; 2</code> | `6`
+`<<`        | Left shift              | `x << y`    | Left to right | `4 << 1`              | `8`
+`>>`        | Right arithmetic shift  | `x >> y`    | Left to right | `8 >> 1`              | `4`
+`>>>`       | Right logical shift     | `x >>> y`   | Left to right | `-8 >>> 1`            | `2147483644`
+`and`       | Logical and             | `x and y`   | Left to right | `true and false`      | `false`
+`not`       | Logical not             | `not y`     | Right to left | `not true`            | `false`
+`or`        | Logical or              | `x or y`    | Left to right | `true or false`       | `true`
+`xor`       | Logical xor             | `x xor y`   | Left to right | `true or true`        | `false`
 `=`         | Assignment              | `x = y`     | Right to left | `a = 5`               | `5`
 `?` `:`     | Conditional expression  | `x ? y : z` | Right to left | `15 > 100 ? 1 : -1`   | `-1`
-`:`         | Range                   | `x : y`     | None          | `1:4`                 | `[1,2,3,4]`
+`:`         | Range                   | `x : y`     | Right to left | `1:4`                 | `[1,2,3,4]`
 `to`, `in`  | Unit conversion         | `x to y`    | Left to right | `2 inch to cm`        | `5.08 cm`
 `==`        | Equal                   | `x == y`    | Left to right | `2 == 4 - 2`          | `true`
 `!=`        | Unequal                 | `x != y`    | Left to right | `2 != 3`              | `true`
@@ -72,6 +85,9 @@ Operator    | Name                    | Syntax      | Associativity | Example   
 `>`         | Larger                  | `x > y`     | Left to right | `2 > 3`               | `false`
 `<=`        | Smallereq               | `x <= y`    | Left to right | `4 <= 3`              | `false`
 `>=`        | Largereq                | `x >= y`    | Left to right | `2 + 4 >= 6`          | `true`
+
+
+## Precedence
 
 The operators have the following precedence, from highest to lowest:
 
@@ -81,13 +97,20 @@ Operators                         | Description
 `'`                               | Matrix transpose
 `!`                               | Factorial
 `^`, `.^`                         | Exponentiation
-`+`, `-`                          | Unary plus, unary minus
+`+`, `-`, `~`, `not`              | Unary plus, unary minus, bitwise not, logical not
 `x unit`                          | Unit
 `*`, `/`, `.*`, `./`, `%`, `mod`  | Multiply, divide, modulus, implicit multiply
 `+`, `-`                          | Add, subtract
 `:`                               | Range
 `to`, `in`                        | Unit conversion
+`<<`, `>>`, `>>>`                 | Bitwise left shift, bitwise right arithmetic shift, bitwise right logical shift
 `==`, `!=`, `<`, `>`, `<=`, `>=`  | Relational
+`&`                               | Bitwise and
+<code>^&#124;</code>              | Bitwise xor
+<code>&#124;</code>               | Bitwise or
+`and`                             | Logical and
+`xor`                             | Logical xor
+`or`                              | Logical or
 `?`, `:`                          | Conditional expression
 `=`                               | Assignment
 `,`                               | Parameter and column separator
@@ -317,6 +340,10 @@ math.eval('5.4 kg');                    // Unit, 5.4 kg
 math.eval('2 inch to cm');              // Unit, 5.08 cm
 math.eval('20 celsius in fahrenheit');  // Unit, ~68 fahrenheit
 
+// convert a unit to a number
+// A second parameter with the unit for the exported number must be provided
+math.eval('number(5 cm, mm)');          // Number, 50
+
 // calculations with units
 math.eval('0.5kg + 33g');               // Unit, 0.533 kg
 math.eval('3 inch + 2 cm');             // Unit, 3.7874 inch
@@ -439,7 +466,7 @@ with an entry for every visible statement.
 
 ```js
 // a multi line expression
-math.eval('1 * 3 \n 2 * 3 \n 3 * 3');   // ResultSet, [1, 3, 9]
+math.eval('1 * 3 \n 2 * 3 \n 3 * 3');   // ResultSet, [3, 6, 9]
 
 // semicolon statements are hided from the output
 math.eval('a=3; b=4; a + b \n a * b');  // ResultSet, [7, 12]

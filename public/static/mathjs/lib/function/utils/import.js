@@ -120,14 +120,22 @@ module.exports = function (math) {
           }
           return value.apply(math, args);
         };
+        if (value && value.transform) {
+          math[name].transform = value.transform;
+        }
       }
       else {
         // just create a link to the function or value
         math[name] = value;
       }
 
-      // create a proxy for the Selector
-      math.chaining.Selector.createProxy(name, value);
+      // register the transform function if any
+      if (value && value.transform) {
+        math.expression.transform[name] = value.transform;
+      }
+
+      // create a proxy for the chain
+      math.chaining.Chain.createProxy(name, value);
     }
   }
 
