@@ -5,7 +5,6 @@
    * This model will track the contents of a game zone.
    */
   angular.module('shared.models.zone', [
-    'shared.services.utilities.libraries',
     'shared.models.cardSet'
   ]).factory('Zone', function(lodash, CardSet) {
     var _ = lodash;

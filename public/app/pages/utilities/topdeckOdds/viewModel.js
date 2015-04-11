@@ -2,7 +2,6 @@
   'use strict';
 
   angular.module('app.utilities.topdeckOdds.viewModel', [
-    'shared.services.utilities.libraries',
     'shared.models.zone',
     'app.shared.services.decklists'
   ]).factory('TopdeckOddsVM', TopdeckOddsVMFactory);

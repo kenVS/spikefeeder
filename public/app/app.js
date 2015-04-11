@@ -4,6 +4,7 @@
   // Declare app level module which depends on filters, and services
   angular.module('spikeFeeder', [
     'ui.router',
+    'shared.services.utilities.libraries',
     'spikeFeeder.utilities.topdeckOdds.routes'
   ]).config(function($locationProvider, $stateProvider, $urlRouterProvider) {
     $locationProvider.html5Mode(true);

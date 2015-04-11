@@ -17,7 +17,7 @@
     };
 
     viewModel.useCard = function(argCardName) {
-      var cardObject = topdeckOdds.library.cardSets[argCardName].card;
+      var cardObject = topdeckOdds.library.cardSets[argCardName];
       topdeckOdds.usedPile.addCard(cardObject);
       topdeckOdds.library.removeCard(cardObject);
       viewModel.updateProbabilities();

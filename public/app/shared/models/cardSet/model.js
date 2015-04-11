@@ -6,12 +6,17 @@
    */
   angular.module('shared.models.cardSet', [
     'shared.models.card'
-  ]).factory('CardSet', function(Card) {
+  ]).factory('CardSet', function(lodash, Card) {
+    var _ = lodash;
 
     function CardSet(argCard, argCount) {
-      this.card = new Card(argCard.name, argCard.tags);
-      this._count = argCount || 0;
+      _.assign(this, argCard);
+      this._count = _(argCount).isFinite() ? argCount : 0;
     }
+
+    CardSet.prototype = _.create(Card.prototype, {
+      'constructor': CardSet
+    });
 
     Object.defineProperty(CardSet.prototype, 'count', {
       get: function() {

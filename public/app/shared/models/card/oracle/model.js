@@ -5,63 +5,40 @@
    * This model will hold all the data for a single Magic card that is common across all printings.
    */
   angular.module('shared.models.card.oracle', [
-    'shared.services.utilities.libraries'
+    /* Dependencies */
   ]).factory('Oracle', function(lodash) {
     var _ = lodash;
 
-    function Oracle(argName, argTags) {
-      this.name = argName;
+    function Oracle(argName) {
+      /* Name fields */
+      this.name = _(argName).isString() ? argName : 'UNNAMED_CARD';
       this.names = undefined;
-
+      /* Mana fields */
       this.manaCost = undefined;
       this.cmc = undefined;
       this.colors = undefined;
-
+      /* Layout fields */
+      this.layout = undefined;
+      /* Type fields */
       this.type = undefined;
       this.supertypes = undefined;
       this.types = undefined;
       this.subtypes = undefined;
-
+      /* Ability text */
       this.oracleText = undefined;
-
-      this.tags = argTags ? argTags : [];
+      /* Creature stats fields */
+      this.power = undefined;
+      this.toughness = undefined;
+      /* Planeswalker stats fields */
+      this.loyalty = undefined;
+      /* Vanguard fields */
+      this.hand = undefined;
+      this.life = undefined;
     }
 
-    Oracle.prototype.addTags = function(argTags) {
-      var currentTags;
-      var newTags;
-
-      currentTags = this.tags;
-      newTags = [];
-
-      argTags.forEach(function(tag) {
-        if (_.includes(currentTags, tag) === false) {
-          newTags.push(tag);
-        }
-      });
-
-      this.tags.push(newTags);
-    };
-
-    Oracle.prototype.removeTags = function(argTags) {
-      var tagIndex,
-          updatedTags;
-
-      updatedTags = this.tags;
-
-      argTags.forEach(function(tag) {
-        tagIndex = updatedTags.indexOf(tag);
-        if (tagIndex > -1) {
-          updatedTags.splice(tagIndex, 1);
-        }
-      });
-
-      this.tags = updatedTags;
-    };
-
-    //Oracle.prototype.toJSON = function() {
-    //
-    //};
+    Oracle.prototype = _.create(Object.prototype, {
+      'constructor': Oracle
+    });
 
     return Oracle;
   });

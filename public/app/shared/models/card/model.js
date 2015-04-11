@@ -2,21 +2,54 @@
   'use strict';
 
   /**
-   * This model will hold all the data for a single Magic card that is specific to a certain printing.
-   *
-   * (This should not need to be implemented until it becomes necessary to customize the display based on printings..)
+   * This model is a wrapper for non-oracle-text functionality.
    */
   angular.module('shared.models.card', [
-    'shared.services.utilities.libraries',
     'shared.models.card.oracle'
   ]).factory('Card', function(lodash, Oracle) {
     var _ = lodash;
 
     function Card(argName, argTags) {
-      var self = this;
+      Oracle.call(this, argName);
 
-      _.assign(self, new Oracle(argName, argTags));
+      this.tags = _(argTags).isArray ? argTags : [];
     }
+
+    Card.prototype = _.create(Oracle.prototype, {
+      'constructor': Card
+    });
+
+    Card.prototype.addTags = function(argTags) {
+      var currentTags;
+      var newTags;
+
+      currentTags = this.tags;
+      newTags = [];
+
+      argTags.forEach(function(tag) {
+        if (_.includes(currentTags, tag) === false) {
+          newTags.push(tag);
+        }
+      });
+
+      this.tags.push(newTags);
+    };
+
+    Card.prototype.removeTags = function(argTags) {
+      var tagIndex,
+          updatedTags;
+
+      updatedTags = this.tags;
+
+      argTags.forEach(function(tag) {
+        tagIndex = updatedTags.indexOf(tag);
+        if (tagIndex > -1) {
+          updatedTags.splice(tagIndex, 1);
+        }
+      });
+
+      this.tags = updatedTags;
+    };
 
     return Card;
   });

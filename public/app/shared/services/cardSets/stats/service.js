@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('app.shared.services.cardSets.stats', [
-    'shared.services.utilities.libraries'
+    /* Dependencies */
   ]).service('cardSetsStatsService', cardSetsStatsService);
 
   function cardSetsStatsService($q, math, jStat, lodash) {
@@ -29,14 +29,14 @@
         chanceToDraw = math.round(chanceToDraw, 1);           // Round to nearest tenth of a percent
 
         oddsArray.push({
-          name:        cardSet.card.name,
+          name:        cardSet.name,
           count:       cardSet.count,
           probability: chanceToDraw,
           type:        'CARD'
         });
 
         // Prepare tag map for tag probability calculations
-        cardSet.card.tags.forEach(function(tag) {
+        cardSet.tags.forEach(function(tag) {
           if (tagMap[tag] === undefined) {
             tagMap[tag] = cardSet.count;
           } else {

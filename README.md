@@ -3,6 +3,14 @@
 https://docs.google.com/spreadsheets/d/1kuMrb6GMKPjyEp7OjMBAu9CDb4isXfpUWJQH35uKaXY
 
 ## Session Logs
+4/10/2015
+- Changed shared models to be more object oriented (extend each other, etc.)
+- Added new CardList object to have an object for sideboard and main deck in decklist
+- Next Session
+    - Change Decklist object to use new CardList object
+    - Add sideboard functionality to existing decklist object
+    - Make way to save decklists in the client (make sure it is easily refactored later to save to server)
+
 4/9/2015
 - More app structure changes checked in and removed the last of the old structure.
 - All old existing functionality is reimplemented except for decklist editing.
